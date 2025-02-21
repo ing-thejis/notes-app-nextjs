@@ -19,6 +19,7 @@ const NoteContext = createContext<{
     id: number;
     note: UpdateNoteT;
   }) => Promise<void>;
+  loading: boolean;
 }>({
   notes: [],
   loadNotes: async () => {},
@@ -27,13 +28,16 @@ const NoteContext = createContext<{
   selectedNote: null,
   setSelectedNote: () => {},
   updateNote: async () => {},
+  loading: false,
 });
 
 export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const loadNotes = async () => {
+    setLoading(true);
     try {
       const response = await fetch("/api/notes");
       if (!response.ok) {
@@ -43,10 +47,13 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
       setNotes(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const createNote = async (note: CreateNoteT) => {
+    setLoading(true);
     try {
       const response = await fetch("/api/notes", {
         method: "POST",
@@ -63,10 +70,13 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
       setNotes([...notes, newNote]);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const deleteNote = async (id: number) => {
+    setLoading(true);
     try {
       const response = await fetch(`/api/notes/${id}`, {
         method: "DELETE",
@@ -78,6 +88,8 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
       setNotes(notes.filter((note) => note.id !== noteDeleted.id));
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,6 +100,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
     id: number;
     note: UpdateNoteT;
   }) => {
+    setLoading(true);
     try {
       const response = await fetch(`/api/notes/${id}`, {
         method: "PUT",
@@ -105,6 +118,8 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
       );
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -118,6 +133,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
         selectedNote,
         setSelectedNote,
         updateNote,
+        loading,
       }}
     >
       {children}

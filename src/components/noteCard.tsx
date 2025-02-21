@@ -1,7 +1,7 @@
 import { useNotes } from "@/context/NotesContext";
 import { Note } from "@prisma/client";
 
-const NoteCard = (note: Note) => {
+export const NoteCard = (note: Note) => {
   const { deleteNote, setSelectedNote } = useNotes();
 
   return (
@@ -29,5 +29,3 @@ const NoteCard = (note: Note) => {
     </div>
   );
 };
-
-export default NoteCard;

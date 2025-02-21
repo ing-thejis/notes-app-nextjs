@@ -4,7 +4,7 @@ import { useNotes } from "@/context/NotesContext";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useRef } from "react";
 
-export default function NoteForm() {
+export function NoteForm() {
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -39,6 +39,11 @@ export default function NoteForm() {
     formData.forEach((value, key) => {
       jsonObject[key] = value as string;
     });
+
+    if (!jsonObject.title || !jsonObject.content) {
+      alert("Please fill in all fields");
+      return;
+    }
 
     if (selectedNote) {
       // update note
@@ -88,7 +93,7 @@ export default function NoteForm() {
       <div className="flex gap-4">
         <button
           type="submit"
-          className="w-full px-4 py-2 text-white bg-blue-600 rounded-md"
+          className="w-full px-4 py-2 text-white bg-blue-600 rounded-md disabled:opacity-50"
         >
           {selectedNote ? "Update" : "Create"}
         </button>
