@@ -72,9 +72,9 @@ export function NoteForm() {
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="w-full max-w-sm flex flex-col gap-2"
+      className="w-full max-w-sm flex flex-col gap-2 border-2 border-blue-600 rounded-md p-4"
     >
-      <h1 className="text-2xl font-bold">Create Note</h1>
+      <h1 className="w-full text-center text-2xl font-bold">Create Note</h1>
       <input
         ref={titleRef}
         type="text"
